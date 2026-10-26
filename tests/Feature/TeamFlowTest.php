@@ -345,6 +345,7 @@ class TeamFlowTest extends TestCase
         $captain = $this->makeUser('captain-'.substr(sha1($name), 0, 8));
         $this->actingAs($captain)->post(route('teams.store'), ['name' => $name])->assertRedirect();
         $team = Team::where('name', $name)->firstOrFail();
+        auth()->logout();
 
         return [$captain, $team, $team->invitation_code_encrypted];
     }

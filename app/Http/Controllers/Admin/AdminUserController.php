@@ -31,6 +31,12 @@ class AdminUserController extends Controller
             'At least one active administrator must remain.'
         );
 
+        abort_if(
+            $validated['role'] !== 'contestant' && Team::where('captain_id', $user->id)->where('status', 'active')->exists(),
+            422,
+            'Active team captains must transfer captaincy before their role can be changed.'
+        );
+
         DB::transaction(function () use ($request, $user, $validated, $previousRole): void {
             if ($previousRole === 'contestant' && $validated['role'] !== 'contestant') {
                 foreach (Team::where('captain_id', $user->id)->where('status', 'active')->get() as $team) {
@@ -75,6 +81,12 @@ class AdminUserController extends Controller
             $user->role === 'admin' && $user->is_active && ! $isActive && User::where('role', 'admin')->where('is_active', true)->count() < 2,
             422,
             'At least one active administrator must remain.'
+        );
+
+        abort_if(
+            ! $isActive && Team::where('captain_id', $user->id)->where('status', 'active')->exists(),
+            422,
+            'Active team captains must transfer captaincy before their account can be deactivated.'
         );
 
         $previousStatus = $user->is_active;
