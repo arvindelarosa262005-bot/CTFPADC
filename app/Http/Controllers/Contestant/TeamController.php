@@ -119,6 +119,11 @@ class TeamController extends Controller
                     throw ValidationException::withMessages(['invitation_code' => 'That invitation code is invalid or no longer active.']);
                 }
 
+                $activeCount = $team->activeMembers()->count();
+                if ($activeCount >= Team::MAX_MEMBERS) {
+                    throw ValidationException::withMessages(['invitation_code' => 'This team has already reached its maximum capacity of 4 members.']);
+                }
+
                 $team->memberships()->create([
                     'user_id' => $user->id,
                     'role' => 'member',

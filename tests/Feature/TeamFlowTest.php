@@ -340,6 +340,32 @@ class TeamFlowTest extends TestCase
         $response->assertSee('Delete</button>', false);
     }
 
+    public function test_team_cannot_exceed_maximum_four_members(): void
+    {
+        [$captain, $team, $code] = $this->createTeam('Delta Elite');
+        
+        // Add 3 members so team has 4 members total (captain + 3 members)
+        for ($i = 1; $i <= 3; $i++) {
+            $member = $this->makeUser("delta-op-{$i}");
+            $this->actingAs($member)
+                ->post(route('teams.join.store'), ['invitation_code' => $code])
+                ->assertRedirect(route('teams.show', $team));
+            auth()->logout();
+        }
+
+        $this->assertSame(4, $team->activeMembers()->count());
+
+        // 5th user tries to join
+        $fifthUser = $this->makeUser('delta-op-fifth');
+        $response = $this->actingAs($fifthUser)
+            ->from(route('teams.join'))
+            ->post(route('teams.join.store'), ['invitation_code' => $code]);
+
+        $response->assertRedirect(route('teams.join'));
+        $response->assertSessionHasErrors(['invitation_code']);
+        $this->assertSame(4, $team->fresh()->activeMembers()->count());
+    }
+
     private function createTeam(string $name = 'Signal Crew'): array
     {
         $captain = $this->makeUser('captain-'.substr(sha1($name), 0, 8));

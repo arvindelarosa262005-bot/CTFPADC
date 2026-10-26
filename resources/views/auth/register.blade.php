@@ -17,6 +17,10 @@
         <input id="username" name="username" type="text" value="{{ old('username') }}" autocomplete="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_.|-]{3,30}" title="Use 3–30 letters, numbers, periods, underscores, hyphens, or vertical bars." required autofocus>
         @error('username')<p class="field-error">{{ $message }}</p>@enderror
 
+        <label for="nickname">Hacker Callsign / Nickname <small style="color: var(--faint); font-weight: 400;">(Optional, e.g. krypt, cyber)</small></label>
+        <input id="nickname" name="nickname" type="text" value="{{ old('nickname') }}" placeholder="e.g. krypt, cyber, spectre" maxlength="50">
+        @error('nickname')<p class="field-error">{{ $message }}</p>@enderror
+
         <label for="email">Email address</label>
         <input id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" maxlength="255" required>
         @error('email')<p class="field-error">{{ $message }}</p>@enderror

@@ -26,23 +26,69 @@
     </section>
 
     <section class="admin-overview" aria-label="Administrative overview">
-        <article class="admin-stat"><span>REGISTERED USERS</span><strong>{{ number_format($registeredUsers) }}</strong><small>Accounts in this range</small></article>
-        <article class="admin-stat"><span>EXISTING TEAMS</span><strong>{{ number_format($existingTeams) }}</strong><small>Created by administrators</small></article>
-        <article class="admin-stat points-card"><span>POINTS EARNED</span><strong>000</strong><small>Ready to be earned</small><i>PLACEHOLDER · VERIFIED SCORING NOT ACTIVE</i></article>
+        <article class="admin-stat"><span>REGISTERED USERS</span><strong id="stat-registered-users">{{ number_format($registeredUsers) }}</strong><small>Accounts in this range</small></article>
+        <article class="admin-stat"><span>EXISTING TEAMS</span><strong id="stat-existing-teams">{{ number_format($existingTeams) }}</strong><small>Max 4 operatives per squad</small></article>
+        <article class="admin-stat points-card" id="card-points-earned">
+            <span>POINTS EARNED</span>
+            <strong id="stat-points-earned">{{ $totalPointsEarned > 0 ? number_format($totalPointsEarned) : '000' }}</strong>
+            <small id="stat-points-note">{{ $totalPointsEarned > 0 ? 'Verified points across ' . number_format($totalFlagsCaptured) . ' captured flag(s)' : 'Ready to be earned' }}</small>
+            <i id="stat-points-badge">{{ $totalPointsEarned > 0 ? 'REAL-TIME SCORING TELEMETRY ACTIVE' : 'PLACEHOLDER · VERIFIED SCORING NOT ACTIVE' }}</i>
+        </article>
     </section>
+
+    <!-- Real-Time CTF Leaderboard & Solves Monitor -->
+    <div class="live-monitor-banner">
+        <div class="live-monitor-status">
+            <span class="status-dot"></span>
+            <span>LIVE CTF RADAR &amp; LEADERBOARD</span>
+            <span class="live-sync-indicator" id="live-sync-indicator">LIVE AUTO-SYNC: 5S</span>
+        </div>
+        <div class="live-monitor-actions">
+            <span class="last-sync-time" id="last-sync-time">SYNCED: {{ now()->format('H:i:s') }}</span>
+            <button type="button" class="small-action" id="btn-manual-sync">⚡ Sync now</button>
+            <button type="button" class="small-action" id="btn-toggle-sync" data-active="true">Pause</button>
+        </div>
+    </div>
+
+    <!-- Live Recent Flag Captures Stream -->
+    <div class="realtime-ticker-box">
+        <div class="ticker-header">
+            <span><span class="status-dot" style="width:6px;height:6px;display:inline-block;margin-right:6px;"></span>LIVE FLAG CAPTURE STREAM</span>
+            <span>REAL-TIME VERIFICATION FEED</span>
+        </div>
+        <div class="ticker-stream" id="ticker-stream">
+            @forelse ($recentSolves as $solve)
+                <div class="ticker-item">
+                    <span class="ticker-time">{{ $solve->verified_at?->format('H:i:s') }}</span>
+                    <span class="ticker-badge">+{{ $solve->points_awarded }} PTS</span>
+                    <span class="ticker-user">{{ $solve->user?->nickname ?: $solve->user?->username }} @if($solve->user?->nickname)<small style="color:var(--muted);font-weight:400;">({{ '@' . $solve->user?->username }})</small>@endif</span>
+                    <span class="ticker-arrow">captured</span>
+                    <span class="ticker-challenge">{{ $solve->challenge?->title }}</span>
+                    <span class="ticker-team">[{{ $solve->teamAtSolve?->name ?? 'Solo' }}]</span>
+                </div>
+            @empty
+                <div class="ticker-item ticker-empty" id="ticker-empty-placeholder">Waiting for incoming flag submissions in range...</div>
+            @endforelse
+        </div>
+    </div>
 
     <section class="admin-section" id="individual-rankings">
         <div class="section-heading"><div><div class="eyebrow">VERIFIED SOLVES <span class="eyebrow-divider">/</span> 01</div><h2>Individual Top Scorers</h2></div><span class="admin-section-note">POINTS DESC · USERNAME ASC</span></div>
         @if ($individualScorers->isEmpty())
-            <div class="empty-state admin-empty"><span class="empty-symbol">#</span><div><h3>No scores available yet</h3><p>Individual rankings will appear after verified solves are recorded.</p></div></div>
+            <div class="empty-state admin-empty" id="empty-individual-scorers"><span class="empty-symbol">#</span><div><h3>No scores available yet</h3><p>Individual rankings will appear after verified solves are recorded.</p></div></div>
+            <div class="table-scroll" id="wrap-individual-scorers" style="display: none;"><table class="admin-table"><thead><tr><th>RANK</th><th>OPERATIVE / CALLSIGN</th><th>USERNAME</th><th>TEAM</th><th>VERIFIED POINTS</th><th>FLAGS CAPTURED</th><th>ACTIONS</th></tr></thead><tbody id="live-individual-body"></tbody></table></div>
         @else
-            <div class="table-scroll"><table class="admin-table"><thead><tr><th>RANK</th><th>USERNAME</th><th>VERIFIED POINTS</th><th>CHALLENGES SOLVED</th><th>ACTIONS</th></tr></thead><tbody>
+            <div class="table-scroll" id="wrap-individual-scorers"><table class="admin-table"><thead><tr><th>RANK</th><th>OPERATIVE / CALLSIGN</th><th>USERNAME</th><th>TEAM</th><th>VERIFIED POINTS</th><th>FLAGS CAPTURED</th><th>ACTIONS</th></tr></thead><tbody id="live-individual-body">
                 @foreach ($individualScorers as $index => $scorer)
-                    <tr>
+                    <tr data-user-id="{{ $scorer->id }}">
                         <td class="rank-cell">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</td>
-                        <td>{{ $scorer->username }}</td>
-                        <td>{{ number_format($scorer->total_verified_points ?? 0) }}</td>
-                        <td>{{ number_format($scorer->challenges_solved) }}</td>
+                        <td>
+                            <strong style="color: var(--acid);">{{ $scorer->nickname ?: $scorer->username }}</strong>
+                        </td>
+                        <td><span style="font-family: var(--mono); color: var(--muted);">{{ '@' . $scorer->username }}</span></td>
+                        <td><span style="font-size: 11px; color: var(--muted);">{{ $scorer->activeTeams->first()?->name ?? 'Solo / No team' }}</span></td>
+                        <td style="font-family: var(--mono); font-weight: 600; color: var(--emerald);">{{ number_format($scorer->total_verified_points ?? 0) }}</td>
+                        <td style="font-family: var(--mono);">{{ number_format($scorer->challenges_solved) }}</td>
                         <td>
                             @if ($scorer->isPrimaryAdmin() || strtolower($scorer->username) === 'admin')
                                 <span class="state-label">Protected admin</span>
@@ -60,14 +106,22 @@
         @endif
     </section>
 
-    <section class="admin-section">
+    <section class="admin-section" id="team-rankings">
         <div class="section-heading"><div><div class="eyebrow">TEAM SOLVES <span class="eyebrow-divider">/</span> 02</div><h2>Team Scorers</h2></div><span class="admin-section-note">POINTS DESC · TEAM NAME ASC</span></div>
         @if ($teamScorers->isEmpty())
-            <div class="empty-state admin-empty"><span class="empty-symbol">#</span><div><h3>No scores available yet</h3><p>Team rankings will appear after verified team solves are recorded.</p></div></div>
+            <div class="empty-state admin-empty" id="empty-team-scorers"><span class="empty-symbol">#</span><div><h3>No scores available yet</h3><p>Team rankings will appear after verified team solves are recorded.</p></div></div>
+            <div class="table-scroll" id="wrap-team-scorers" style="display: none;"><table class="admin-table"><thead><tr><th>TEAM RANK</th><th>TEAM NAME</th><th>VERIFIED TEAM POINTS</th><th>FLAGS CAPTURED</th><th>MEMBERS (MAX 4)</th><th>CAPTAIN CALLSIGN</th></tr></thead><tbody id="live-team-body"></tbody></table></div>
         @else
-            <div class="table-scroll"><table class="admin-table"><thead><tr><th>TEAM RANK</th><th>TEAM NAME</th><th>VERIFIED TEAM POINTS</th><th>MEMBERS</th><th>CHALLENGES SOLVED</th></tr></thead><tbody>
+            <div class="table-scroll" id="wrap-team-scorers"><table class="admin-table"><thead><tr><th>TEAM RANK</th><th>TEAM NAME</th><th>VERIFIED TEAM POINTS</th><th>FLAGS CAPTURED</th><th>MEMBERS (MAX 4)</th><th>CAPTAIN CALLSIGN</th></tr></thead><tbody id="live-team-body">
                 @foreach ($teamScorers as $index => $team)
-                    <tr><td class="rank-cell">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</td><td>{{ $team->name }}</td><td>{{ number_format($team->total_verified_points ?? 0) }}</td><td>{{ number_format($team->members_count) }}</td><td>{{ number_format($team->challenges_solved) }}</td></tr>
+                    <tr data-team-id="{{ $team->id }}">
+                        <td class="rank-cell">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</td>
+                        <td><strong>{{ $team->name }}</strong></td>
+                        <td style="font-family: var(--mono); font-weight: 600; color: var(--emerald);">{{ number_format($team->total_verified_points ?? 0) }}</td>
+                        <td style="font-family: var(--mono);">{{ number_format($team->challenges_solved) }}</td>
+                        <td><span class="state-label">{{ $team->members_count }} / 4</span></td>
+                        <td><span style="color: var(--acid); font-weight: 600;">{{ $team->captain?->nickname ?: $team->captain?->username ?? '—' }}</span></td>
+                    </tr>
                 @endforeach
             </tbody></table></div>
         @endif
@@ -78,10 +132,13 @@
         @if ($users->isEmpty())
             <div class="empty-state admin-empty"><span class="empty-symbol">∅</span><div><h3>No user accounts yet</h3><p>Registered contestants will appear here.</p></div></div>
         @else
-            <div class="table-scroll"><table class="admin-table management-table"><thead><tr><th>ACCOUNT</th><th>ROLE</th><th>STATUS</th><th>TEAM MEMBERSHIP</th><th>ACTIONS</th></tr></thead><tbody>
+            <div class="table-scroll"><table class="admin-table management-table"><thead><tr><th>ACCOUNT</th><th>ROLE</th><th>STATUS</th><th>TEAM MEMBERSHIP (MAX 4)</th><th>ACTIONS</th></tr></thead><tbody>
                 @foreach ($users as $managedUser)
                     <tr>
-                        <td><strong>{{ $managedUser->username }}</strong><small>{{ $managedUser->email }}</small></td>
+                        <td>
+                            <strong>{{ $managedUser->nickname ?: $managedUser->username }}</strong>
+                            <small>{{ '@' . $managedUser->username }} · {{ $managedUser->email }}</small>
+                        </td>
                         <td>
                             @if (auth()->user()->is($managedUser))
                                 <span class="state-label">{{ ucfirst($managedUser->role) }} · current admin</span>
@@ -100,7 +157,7 @@
                                 <form class="management-form" method="POST" action="{{ route('admin.users.status', $managedUser) }}">@csrf @method('PATCH')<select name="is_active" aria-label="Account status for {{ $managedUser->username }}"><option value="1" @selected($managedUser->is_active)>Active</option><option value="0" @selected(! $managedUser->is_active)>Inactive</option></select><button type="submit" class="small-action">Save</button></form>
                             @endif
                         </td>
-                        <td><form class="management-form" method="POST" action="{{ route('admin.users.team', $managedUser) }}">@csrf @method('PATCH')<select name="team_id" aria-label="Team for {{ $managedUser->username }}"><option value="">No team</option>@foreach ($teams as $team)<option value="{{ $team->id }}" @selected($managedUser->activeTeams->contains('id', $team->id))>{{ $team->name }}</option>@endforeach</select><button type="submit" class="small-action">Save</button></form></td>
+                        <td><form class="management-form" method="POST" action="{{ route('admin.users.team', $managedUser) }}">@csrf @method('PATCH')<select name="team_id" aria-label="Team for {{ $managedUser->username }}"><option value="">No team</option>@foreach ($teams as $team)<option value="{{ $team->id }}" @selected($managedUser->activeTeams->contains('id', $team->id))>{{ $team->name }} ({{ $team->members_count }}/4)</option>@endforeach</select><button type="submit" class="small-action">Save</button></form></td>
                         <td>
                             @if ($managedUser->isPrimaryAdmin() || strtolower($managedUser->username) === 'admin')
                                 <span class="state-label">Protected admin</span>
@@ -217,3 +274,182 @@
         @endif
     </section>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const liveEndpoint = "{{ route('admin.scores.live') }}";
+    const deleteRouteBase = "{{ url('/admin/users') }}";
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    
+    let isPolling = true;
+    let pollInterval = null;
+
+    const btnToggle = document.getElementById('btn-toggle-sync');
+    const btnManual = document.getElementById('btn-manual-sync');
+    const lastSyncEl = document.getElementById('last-sync-time');
+    const indicatorEl = document.getElementById('live-sync-indicator');
+
+    const individualBody = document.getElementById('live-individual-body');
+    const wrapIndividual = document.getElementById('wrap-individual-scorers');
+    const emptyIndividual = document.getElementById('empty-individual-scorers');
+
+    const teamBody = document.getElementById('live-team-body');
+    const wrapTeam = document.getElementById('wrap-team-scorers');
+    const emptyTeam = document.getElementById('empty-team-scorers');
+
+    const statPoints = document.getElementById('stat-points-earned');
+    const statPointsNote = document.getElementById('stat-points-note');
+    const statPointsBadge = document.getElementById('stat-points-badge');
+    const tickerStream = document.getElementById('ticker-stream');
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat().format(num || 0);
+    }
+
+    function pad2(num) {
+        return String(num).padStart(2, '0');
+    }
+
+    async function fetchLiveScores() {
+        try {
+            const response = await fetch(liveEndpoint, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            if (!response.ok) return;
+            const data = await response.json();
+
+            // 1. Update stats
+            if (data.stats) {
+                if (statPoints) {
+                    statPoints.textContent = data.stats.total_points > 0 ? formatNumber(data.stats.total_points) : '000';
+                }
+                if (statPointsNote) {
+                    statPointsNote.textContent = data.stats.total_points > 0 
+                        ? `Verified points across ${formatNumber(data.stats.total_flags)} captured flag(s)`
+                        : 'Ready to be earned';
+                }
+                if (statPointsBadge) {
+                    statPointsBadge.textContent = data.stats.total_points > 0 
+                        ? 'REAL-TIME SCORING TELEMETRY ACTIVE'
+                        : 'PLACEHOLDER · VERIFIED SCORING NOT ACTIVE';
+                }
+            }
+
+            // 2. Update Individuals
+            if (data.individuals && data.individuals.length > 0) {
+                if (emptyIndividual) emptyIndividual.style.display = 'none';
+                if (wrapIndividual) wrapIndividual.style.display = '';
+
+                if (individualBody) {
+                    individualBody.innerHTML = data.individuals.map(scorer => {
+                        const deleteBtn = scorer.is_admin ? '<span class="state-label">Protected admin</span>' : `
+                            <form class="management-form" method="POST" action="${deleteRouteBase}/${scorer.id}/solves" onsubmit="return confirm('Are you sure you want to delete verified solves for user \\'${scorer.username}\\'?');">
+                                <input type="hidden" name="_token" value="${csrfToken}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="small-action small-action-danger">Delete</button>
+                            </form>
+                        `;
+
+                        return `
+                            <tr data-user-id="${scorer.id}">
+                                <td class="rank-cell">${pad2(scorer.rank)}</td>
+                                <td>
+                                    <strong style="color: var(--acid);">${scorer.nickname || scorer.username}</strong>
+                                </td>
+                                <td><span style="font-family: var(--mono); color: var(--muted);">@${scorer.username}</span></td>
+                                <td><span style="font-size: 11px; color: var(--muted);">${scorer.team_name}</span></td>
+                                <td style="font-family: var(--mono); font-weight: 600; color: var(--emerald);">${formatNumber(scorer.points)}</td>
+                                <td style="font-family: var(--mono);">${formatNumber(scorer.solves_count)}</td>
+                                <td>${deleteBtn}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // 3. Update Teams
+            if (data.teams && data.teams.length > 0) {
+                if (emptyTeam) emptyTeam.style.display = 'none';
+                if (wrapTeam) wrapTeam.style.display = '';
+
+                if (teamBody) {
+                    teamBody.innerHTML = data.teams.map(team => `
+                        <tr data-team-id="${team.id}">
+                            <td class="rank-cell">${pad2(team.rank)}</td>
+                            <td><strong>${team.name}</strong></td>
+                            <td style="font-family: var(--mono); font-weight: 600; color: var(--emerald);">${formatNumber(team.points)}</td>
+                            <td style="font-family: var(--mono);">${formatNumber(team.solves_count)}</td>
+                            <td><span class="state-label">${team.members_count} / ${team.max_members}</span></td>
+                            <td><span style="color: var(--acid); font-weight: 600;">${team.captain_callsign}</span></td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            // 4. Update Recent Solves Ticker
+            if (data.recent_solves && data.recent_solves.length > 0 && tickerStream) {
+                const placeholder = document.getElementById('ticker-empty-placeholder');
+                if (placeholder) placeholder.remove();
+
+                tickerStream.innerHTML = data.recent_solves.map(solve => `
+                    <div class="ticker-item">
+                        <span class="ticker-time">${solve.verified_at}</span>
+                        <span class="ticker-badge">+${solve.points} PTS</span>
+                        <span class="ticker-user">${solve.user_callsign} ${solve.username ? `<small style="color:var(--muted);font-weight:400;">(@${solve.username})</small>` : ''}</span>
+                        <span class="ticker-arrow">captured</span>
+                        <span class="ticker-challenge">${solve.challenge_title}</span>
+                        <span class="ticker-team">[${solve.team_name}]</span>
+                    </div>
+                `).join('');
+            }
+
+            // 5. Update timestamp
+            if (lastSyncEl) {
+                lastSyncEl.textContent = `SYNCED: ${data.timestamp}`;
+            }
+        } catch (err) {
+            console.error('Realtime CTF poll error:', err);
+        }
+    }
+
+    function startPolling() {
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(fetchLiveScores, 5000);
+        isPolling = true;
+        if (btnToggle) btnToggle.textContent = 'Pause';
+        if (indicatorEl) indicatorEl.textContent = 'LIVE AUTO-SYNC: 5S';
+    }
+
+    function stopPolling() {
+        if (pollInterval) clearInterval(pollInterval);
+        isPolling = false;
+        if (btnToggle) btnToggle.textContent = 'Resume';
+        if (indicatorEl) indicatorEl.textContent = 'SYNC PAUSED';
+    }
+
+    if (btnToggle) {
+        btnToggle.addEventListener('click', function () {
+            if (isPolling) {
+                stopPolling();
+            } else {
+                startPolling();
+                fetchLiveScores();
+            }
+        });
+    }
+
+    if (btnManual) {
+        btnManual.addEventListener('click', function () {
+            fetchLiveScores();
+        });
+    }
+
+    // Start auto polling
+    startPolling();
+});
+</script>
+@endpush

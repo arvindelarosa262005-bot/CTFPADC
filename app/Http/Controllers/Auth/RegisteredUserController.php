@@ -28,6 +28,7 @@ class RegisteredUserController extends Controller
 
         $validated = $request->validate([
             'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/\A[a-zA-Z0-9_.|-]+\z/', 'unique:users,username'],
+            'nickname' => ['nullable', 'string', 'max:50', 'regex:/\A[a-zA-Z0-9_.|-]+\z/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [

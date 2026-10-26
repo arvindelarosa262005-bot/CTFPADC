@@ -139,6 +139,7 @@ class AdminUserController extends Controller
             $targetTeam = $teamId === null ? null : Team::query()->lockForUpdate()->findOrFail($teamId);
             abort_if($targetTeam !== null && $targetTeam->status !== 'active', 422, 'That team is not accepting members.');
             abort_if($targetTeam !== null && $currentMembership?->team_id === $targetTeam->id, 422, 'This account is already on that team.');
+            abort_if($targetTeam !== null && $targetTeam->activeMembers()->count() >= Team::MAX_MEMBERS, 422, 'This team has already reached its maximum capacity of 4 members.');
 
             $previousTeamId = $currentMembership?->team_id;
 

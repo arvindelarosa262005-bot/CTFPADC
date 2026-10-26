@@ -19,6 +19,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'username',
+        'nickname',
         'email',
         'google_id',
         'avatar',
@@ -26,6 +27,11 @@ class User extends Authenticatable
         'role',
         'is_active',
     ];
+
+    public function getCallsignAttribute(): string
+    {
+        return $this->nickname ?: $this->username;
+    }
 
     protected $hidden = [
         'password',

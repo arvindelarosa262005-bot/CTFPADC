@@ -927,6 +927,126 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .points-card > span, .points-card strong { color: var(--acid); text-shadow: 0 0 12px rgba(0, 240, 255, 0.3); }
 .points-card i { margin-top: 10px; color: var(--muted); font-family: var(--mono); font-size: 9px; font-style: normal; opacity: 0.85; }
 
+/* ── Real-Time CTF Telemetry & Live Stream ────────────────────────── */
+.live-monitor-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 18px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.1) 0%, rgba(13, 18, 30, 0.8) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(0, 240, 255, 0.08);
+}
+.live-monitor-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 0.04em;
+}
+.live-monitor-status .status-dot {
+    background: var(--acid);
+    box-shadow: 0 0 10px var(--acid), 0 0 18px rgba(0, 240, 255, 0.6);
+}
+.live-sync-indicator {
+    padding: 2px 7px;
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 3px;
+    background: rgba(0, 240, 255, 0.12);
+    color: var(--acid);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+}
+.live-monitor-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.last-sync-time {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+}
+
+.realtime-ticker-box {
+    margin: 0 0 28px;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: rgba(10, 14, 23, 0.75);
+}
+.ticker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+}
+.ticker-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border: 1px solid rgba(23, 34, 51, 0.6);
+    border-radius: 3px;
+    background: rgba(16, 22, 34, 0.4);
+    font-size: 12px;
+    color: var(--text);
+    transition: all 180ms ease;
+}
+.ticker-item:hover {
+    border-color: rgba(0, 240, 255, 0.3);
+    background: rgba(0, 240, 255, 0.04);
+}
+.ticker-item.ticker-new {
+    animation: tickerHighlight 1.5s ease-out;
+}
+@keyframes tickerHighlight {
+    0% { background: rgba(0, 240, 255, 0.25); border-color: var(--acid); }
+    100% { background: rgba(16, 22, 34, 0.4); }
+}
+.ticker-time {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    white-space: nowrap;
+}
+.ticker-badge {
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: rgba(0, 255, 157, 0.15);
+    border: 1px solid rgba(0, 255, 157, 0.4);
+    color: var(--emerald);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.ticker-user {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+.ticker-arrow { color: var(--faint); font-size: 11px; }
+.ticker-challenge { color: var(--acid); font-weight: 500; }
+.ticker-team { color: var(--muted); font-family: var(--mono); font-size: 11px; margin-left: auto; }
+.ticker-empty { color: var(--faint); font-style: italic; }
+
 .admin-section {
     margin: 0 0 40px;
     padding-top: 24px;

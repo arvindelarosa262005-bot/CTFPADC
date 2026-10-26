@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends Model
 {
+    public const MAX_MEMBERS = 4;
+
     protected $fillable = [
         'name',
         'captain_id',

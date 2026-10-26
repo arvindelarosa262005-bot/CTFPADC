@@ -6,6 +6,8 @@ use App\Models\Challenge;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
+use Illuminate\Http\Request;
+
 class DashboardController extends Controller
 {
     public function index(): View|RedirectResponse
@@ -42,5 +44,20 @@ class DashboardController extends Controller
     public function profile(): View
     {
         return view('profile');
+    }
+
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nickname' => ['nullable', 'string', 'max:50', 'regex:/\A[a-zA-Z0-9_.|-]+\z/'],
+        ], [
+            'nickname.regex' => 'The callsign/nickname may only contain letters, numbers, dashes, underscores, pipes, and periods.',
+        ]);
+
+        $request->user()->update([
+            'nickname' => $validated['nickname'] ?? null,
+        ]);
+
+        return back()->with('status', 'Operative callsign updated successfully.');
     }
 }

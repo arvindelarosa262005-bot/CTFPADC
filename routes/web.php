@@ -55,10 +55,12 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     });
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::patch('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
     Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function (): void {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/scores/live', [AdminDashboardController::class, 'liveScores'])->name('scores.live');
         Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.role');
         Route::patch('/users/{user}/status', [AdminUserController::class, 'updateStatus'])->name('users.status');
         Route::patch('/users/{user}/team', [AdminUserController::class, 'updateTeam'])->name('users.team');
