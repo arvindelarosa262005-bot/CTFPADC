@@ -90,8 +90,11 @@ class AllPagesTest extends TestCase
         $this->get('/admin/challenges/create')->assertOk()->assertSee('Create challenge');
         $this->get('/admin/challenges/source-trail/edit')->assertOk()->assertSee('Source Trail');
 
-        // Admin profile & target
+        // Admin profile, home dashboard (redirects to admin console) & target
         $this->get('/profile')->assertOk()->assertSee('cyber_admin');
+        $this->get('/')->assertRedirect(route('admin.dashboard'));
+        $this->get('/challenges')->assertOk()->assertSee('Source Trail');
+        $this->get('/challenges/source-trail')->assertOk()->assertSee('Source Trail');
         $this->get('/challenges/source-trail/target')->assertOk();
     }
 }

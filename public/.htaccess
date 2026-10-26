@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # public/challenges/ is a real folder; let Laravel handle /challenges instead of
+    # Apache appending a slash (which breaks behind Render's proxy).
+    DirectorySlash Off
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -13,6 +17,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
+
+    # Directly route /challenges and /challenges/ to Laravel's index.php
+    # so Apache does not treat it as a folder or append trailing slash.
+    RewriteRule ^challenges/?$ index.php [L]
 
     # Send Requests To Front Controller...
     # Only serve actual files directly, not directories

@@ -27,13 +27,11 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Participant challenge area. Only contestants can browse,
-    // view and submit flags.
-    Route::middleware('role:contestant')->group(function (): void {
-        Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges');
-        Route::get('/challenges/{challenge:slug}', [ChallengeController::class, 'show'])->name('challenges.show');
-        Route::post('/challenges/{challenge:slug}/submissions', [ChallengeController::class, 'submit'])->name('challenges.submit');
-    });
+    // Challenge area. Active contestants and administrators can browse,
+    // view, and submit flags (for scoring or administrative verification).
+    Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges');
+    Route::get('/challenges/{challenge:slug}', [ChallengeController::class, 'show'])->name('challenges.show');
+    Route::post('/challenges/{challenge:slug}/submissions', [ChallengeController::class, 'submit'])->name('challenges.submit');
 
     // The internal challenge target website may be opened by any
     // active authenticated user (contestants and administrators).

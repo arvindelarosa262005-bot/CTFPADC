@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Challenge;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -43,7 +44,37 @@ class DashboardController extends Controller
 
     public function profile(): View
     {
-        return view('profile');
+        $user = auth()->user()->load('activeTeams');
+        $team = $user->activeTeams->first();
+
+        $points = (int) $user->verifiedSolves()->sum('points_awarded');
+        $flags = (int) $user->verifiedSolves()->count();
+
+        $rank = null;
+        if (! $user->isAdmin() && $flags > 0) {
+            $rank = User::query()
+                ->whereHas('verifiedSolves')
+                ->withSum('verifiedSolves as total_points', 'points_awarded')
+                ->get()
+                ->filter(fn (User $other) => (int) $other->total_points > $points)
+                ->count() + 1;
+        }
+
+        $recentSolves = $user->verifiedSolves()
+            ->with('challenge:id,title,slug,category')
+            ->orderByDesc('verified_at')
+            ->limit(5)
+            ->get();
+
+        return view('profile', [
+            'user' => $user,
+            'team' => $team,
+            'teamMemberCount' => $team?->activeMembers()->count() ?? 0,
+            'points' => $points,
+            'flags' => $flags,
+            'rank' => $rank,
+            'recentSolves' => $recentSolves,
+        ]);
     }
 
     public function updateProfile(Request $request): RedirectResponse
