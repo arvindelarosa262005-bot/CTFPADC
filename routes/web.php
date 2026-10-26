@@ -55,7 +55,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     });
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function (): void {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');

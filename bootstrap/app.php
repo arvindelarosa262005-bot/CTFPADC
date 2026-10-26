@@ -22,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('/login');
         $middleware->trustProxies(at: '*');
         $middleware->append(SecurityHeaders::class);
+        $middleware->validateCsrfTokens(except: [
+            '/logout',
+        ]);
         $middleware->alias([
             'active' => EnsureAccountIsActive::class,
             'role' => EnsureUserHasRole::class,
