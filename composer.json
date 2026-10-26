@@ -6,7 +6,7 @@
   "keywords": ["laravel", "ctf", "cybersecurity"],
   "license": "proprietary",
   "require": {
-    "php": "^8.3",
+    "php": "^8.3 || ^8.4",
     "ext-pdo": "*",
     "ext-pdo_pgsql": "*",
     "laravel/framework": "^12.0",
@@ -40,7 +40,8 @@
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true,
-    "allow-plugins": {}
+    "allow-plugins": {},
+    "platform-check": false
   },
   "minimum-stability": "stable",
   "prefer-stable": true

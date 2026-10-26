@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libpq-dev libsqlite3-dev unzip \
@@ -10,21 +10,21 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 WORKDIR /var/www/html
 
-COPY composer.json ./
-RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --no-scripts --optimize-autoloader
+COPY composer.json composer.lock* ./
+RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --no-scripts --optimize-autoloader --ignore-platform-reqs
 
 COPY --chown=www-data:www-data . .
 COPY docker/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN touch .env \
-    && composer dump-autoload --no-dev --no-interaction --optimize --no-scripts \
+    && composer dump-autoload --no-dev --no-interaction --optimize --no-scripts --ignore-platform-reqs \
     && php artisan package:discover --ansi \
     && mkdir -p storage/app/public/challenges storage/app/private storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && php artisan storage:link \
     && chown -R www-data:www-data storage bootstrap/cache public/storage
 
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
