@@ -1,0 +1,17 @@
+/.env
+/.phpunit.cache
+.phpunit.result.cache
+/vendor
+/node_modules
+/public/build
+/public/hot
+/storage/*.key
+/storage/logs/*.log
+/bootstrap/cache/*.php
+.env
+tmp_*.php
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+.backup_pre_source_trail

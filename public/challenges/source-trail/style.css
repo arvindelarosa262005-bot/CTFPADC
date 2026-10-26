@@ -1,0 +1,165 @@
+/*
+ * Maple Street Community Library — site stylesheet.
+ *
+ * Staging note: the old print stylesheet was removed in the last cleanup,
+ * but one leftover line from the build trail is still around.
+ *
+ * relay: _file_tells
+ */
+
+:root {
+    --st-canvas: #f5f6f8;
+    --st-panel: #ffffff;
+    --st-line: #dde1e7;
+    --st-text: #1f2933;
+    --st-muted: #5f6b7a;
+    --st-accent: #2b5fb4;
+    --st-accent-dim: #e6eefb;
+    --st-mono: Consolas, "Courier New", monospace;
+    --st-display: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { min-width: 320px; background: var(--st-canvas); }
+
+body.st-body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--st-text);
+    font-family: var(--st-display);
+    font-size: 16px;
+    line-height: 1.6;
+    background: var(--st-canvas);
+}
+
+.st-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--st-line);
+    background: var(--st-panel);
+}
+
+.st-brand { display: flex; align-items: center; gap: 11px; }
+
+.st-mark {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--st-accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+.st-brandname { font-weight: 700; font-size: 18px; }
+
+.st-tabs { display: flex; gap: 6px; }
+
+.st-tab {
+    min-height: 36px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--st-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 15px;
+    transition: color 140ms ease, background 140ms ease;
+}
+
+.st-tab:hover { color: var(--st-text); background: var(--st-canvas); }
+
+.st-tab.is-active {
+    background: var(--st-accent-dim);
+    color: var(--st-accent);
+    font-weight: 600;
+}
+
+.st-main {
+    width: min(860px, 100%);
+    margin: 0 auto;
+    padding: 36px 28px 48px;
+    flex: 1 0 auto;
+}
+
+.st-panel h1 { margin: 0 0 12px; font-size: 28px; font-weight: 600; }
+
+.st-panel p { margin: 0 0 14px; max-width: 640px; }
+
+.st-lead { font-size: 18px; color: var(--st-muted); }
+
+.st-panel[hidden] { display: none; }
+
+.st-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.st-card {
+    padding: 18px;
+    border: 1px solid var(--st-line);
+    border-radius: 6px;
+    background: var(--st-panel);
+}
+
+.st-card h2 { margin: 0 0 8px; font-size: 17px; }
+.st-card p { margin: 0; color: var(--st-muted); font-size: 15px; }
+
+.st-events { margin: 0 0 16px; padding-left: 22px; }
+.st-events li { margin: 0 0 8px; }
+
+.st-note { color: var(--st-muted); font-size: 14px; }
+
+.st-form { display: grid; gap: 8px; max-width: 420px; }
+.st-form label { font-size: 14px; font-weight: 600; }
+
+.st-form input,
+.st-form textarea {
+    padding: 8px 10px;
+    border: 1px solid var(--st-line);
+    border-radius: 4px;
+    font: inherit;
+}
+
+.st-submit {
+    justify-self: start;
+    min-height: 38px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--st-accent);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+}
+
+.st-status { min-height: 1.4em; color: var(--st-muted); font-size: 14px; }
+
+.st-footer {
+    padding: 16px 28px;
+    border-top: 1px solid var(--st-line);
+    background: var(--st-panel);
+    color: var(--st-muted);
+    font-size: 13px;
+}
+
+@media (max-width: 620px) {
+    .st-header { padding: 12px 16px; }
+    .st-main { padding: 24px 16px 36px; }
+    .st-tab { padding: 0 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+}

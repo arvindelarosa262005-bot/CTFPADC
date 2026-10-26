@@ -1,0 +1,31 @@
+=====================================
+P4DC CTF - Hidden s3cr3ts Challenge
+=====================================
+
+Welcome, investigator!
+
+This file contains a secret flag hidden somewhere within its contents.
+Your mission is to find it using proper forensic analysis tools.
+
+The flag format is: P4DC{...}d
+
+Hints:
+1. Not everything is visible to the naked eye
+2. Try examining the file's structure carefully
+3. Common tools: strings, hexdump, cat -A
+
+Good luck!
+
+=====================================
+Message Body
+=====================================
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+
+[... truncated for brevity ...]
+
+End of visible message.
+   p4dCTF{strings_
+   r3v34l_}   
