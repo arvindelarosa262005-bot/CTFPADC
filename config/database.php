@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', (env('DATABASE_URL') || env('DB_HOST')) ? 'pgsql' : 'sqlite'),
     'connections' => [
         'pgsql' => [
             'driver' => 'pgsql',

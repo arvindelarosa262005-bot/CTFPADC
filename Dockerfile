@@ -23,5 +23,9 @@ RUN touch .env \
     && php artisan storage:link \
     && chown -R www-data:www-data storage bootstrap/cache public/storage
 
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 80
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["apache2-foreground"]
