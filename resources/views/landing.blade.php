@@ -681,7 +681,12 @@
             color: var(--muted);
         }
 
-        /* Responsive Breakpoints */
+        /* Mobile Quick Nav Bar */
+        .mobile-quick-nav {
+            display: none;
+        }
+
+        /* Responsive Breakpoints & Phone View */
         @media (max-width: 980px) {
             .landing-hero {
                 grid-template-columns: 1fr;
@@ -706,18 +711,187 @@
                 grid-template-columns: 1fr;
             }
         }
-        @media (max-width: 640px) {
-            .hero-title {
-                font-size: 34px;
+        @media (max-width: 768px) {
+            .landing-nav-links {
+                display: none;
             }
-            .individual-trio-grid {
-                grid-template-columns: 1fr;
+            .mobile-quick-nav {
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+                gap: 8px;
+                padding: 4px 0 14px;
+                margin-bottom: 20px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-quick-nav::-webkit-scrollbar { display: none; }
+            .mobile-quick-nav a {
+                padding: 6px 14px;
+                font-family: var(--mono);
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--muted);
+                background: rgba(24, 17, 53, 0.85);
+                border: 1px solid var(--padc-border);
+                border-radius: 20px;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                flex-shrink: 0;
+            }
+            .mobile-quick-nav a:hover, .mobile-quick-nav a:active {
+                color: #fff;
+                border-color: var(--padc-purple-bright);
+                background: rgba(168, 85, 247, 0.2);
+            }
+        }
+        @media (max-width: 640px) {
+            html, body {
+                overflow-x: hidden;
+            }
+            .landing-wrap {
+                padding: 0 14px 60px;
+            }
+            .landing-nav {
+                padding: 12px 0;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .landing-brand-text h2 {
+                font-size: 16px;
+            }
+            .landing-brand-text span {
+                font-size: 10px;
+            }
+            .landing-brand-logo {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+            .landing-nav-actions {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 8px;
+            }
+            .landing-nav-actions a {
+                flex: 1;
+                text-align: center;
+                justify-content: center;
+                padding: 8px 12px !important;
+                font-size: 12px !important;
+            }
+            .hero-badge {
+                font-size: 11px;
+                padding: 4px 10px;
+                max-width: 100%;
+            }
+            .hero-title {
+                font-size: 28px;
+                line-height: 1.2;
+            }
+            .hero-subtitle {
+                font-size: 13px;
+            }
+            .hero-desc {
+                font-size: 14px;
+                line-height: 1.55;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .hero-buttons a {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+            .hero-visual-frame img {
+                max-height: 280px;
+            }
+            .hero-frame-hud {
+                padding: 10px 14px;
+                font-size: 10px;
             }
             .landing-stats-bar {
                 grid-template-columns: 1fr;
+                gap: 12px;
             }
-            .landing-nav-links {
-                display: none;
+            .stat-hud-card {
+                padding: 18px 16px;
+                text-align: center;
+            }
+            .stat-number {
+                font-size: 28px;
+            }
+            .section-header h2 {
+                font-size: 26px;
+            }
+            .section-header p {
+                font-size: 14px;
+            }
+            .poster-card {
+                border-radius: 10px;
+            }
+            .poster-img-wrap {
+                padding: 12px;
+            }
+            .poster-body {
+                padding: 16px;
+            }
+            .poster-body h3 {
+                font-size: 20px;
+            }
+            .legacy-team-banner {
+                border-radius: 10px;
+                gap: 14px;
+            }
+            .legacy-img-wrap {
+                padding: 12px;
+            }
+            .legacy-body {
+                padding: 0 14px 18px;
+            }
+            .legacy-body h3 {
+                font-size: 22px;
+            }
+            .legacy-op-tag {
+                width: 100%;
+                font-size: 11px;
+            }
+            .individual-trio-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .individual-img-wrap {
+                padding: 12px;
+            }
+            .individual-body {
+                padding: 14px 16px;
+            }
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            .category-card {
+                padding: 18px;
+            }
+            .category-card h3 {
+                font-size: 18px;
+            }
+            .connect-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .connect-links a {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+            .landing-footer {
+                flex-direction: column;
+                gap: 14px;
+                text-align: center;
             }
         }
     </style>
@@ -730,7 +904,7 @@
                 <div class="landing-brand-logo">P4</div>
                 <div class="landing-brand-text">
                     <h2>PADC CYBER RANGE</h2>
-                    <span>BSIT MAMBURAO · OMSC</span>
+                    <span>BSIT MAMBURAO · OMSU</span>
                 </div>
             </a>
 
@@ -756,6 +930,15 @@
                 @endauth
             </div>
         </nav>
+
+        <!-- Mobile Quick Navigation Bar -->
+        <div class="mobile-quick-nav">
+            <a href="#about">⚡ About</a>
+            <a href="#hall-of-fame">🏆 Hall of Fame</a>
+            <a href="#teams">👥 Teams</a>
+            <a href="#arena">🎯 Arena</a>
+            <a href="https://www.facebook.com/padclan" target="_blank" rel="noopener noreferrer">🌐 FB Page &nearr;</a>
+        </div>
 
         <!-- Logged In Operative Banner -->
         @auth
@@ -783,7 +966,7 @@
                     Programmers', Animators', &amp; <span class="highlight">Developers' Clan</span>
                 </h1>
                 <div class="hero-subtitle">
-                    Bachelor of Science in Information Technology · OMSC Mamburao Campus
+                    Bachelor of Science in Information Technology · OMSU Mamburao Campus
                 </div>
                 <p class="hero-desc">
                     The premier student technology organization of Occidental Mindoro State University – Mamburao Campus. 
@@ -894,7 +1077,7 @@
                             against elite regional universities.
                         </p>
                         <div style="font-family: var(--mono); font-size: 12px; color: var(--padc-purple-bright); padding-top: 10px; border-top: 1px solid var(--line);">
-                            <strong>OPERATIVES:</strong> DAZZY &middot; FINN &middot; JYNX &middot; CLOUD
+                            <strong>OPERATIVES:</strong> DAZZY &middot; FINN &middot; VYNX &middot; CLOUD
                             <br>
                             <span style="color: var(--muted);">COACH: Mr. Erika Jane D. Tadeja</span>
                         </div>
@@ -911,7 +1094,7 @@
                     <span class="legacy-badge">🎖️ PIONEERING CONTENDERS // PREVIOUS YEAR REPRESENTATIVES</span>
                     <h3>TEAM 4C_ITCIANS</h3>
                     <p>
-                        The trailblazers who represented Occidental Mindoro State College &ndash; Mamburao Campus BSIT and Supreme Student Government at the 
+                        The trailblazers who represented Occidental Mindoro State University &ndash; Mamburao Campus BSIT and Supreme Student Government at the 
                         prestigious Hack4Gov Regional Cyber Challenge. Their competitive groundwork and tactical spirit paved 
                         the path for PADC's succeeding champion teams.
                     </p>
@@ -1084,7 +1267,7 @@
         <!-- Footer -->
         <footer class="landing-footer">
             <div class="footer-brand">
-                <strong>PADC - BSIT Mamburao Organization</strong> · Occidental Mindoro State University (OMSC)
+                <strong>PADC - BSIT Mamburao Organization</strong> · Occidental Mindoro State University (OMSU)
                 <br>
                 Programmers', Animators', and Developers' Clan &copy; {{ date('Y') }}. All rights reserved.
             </div>

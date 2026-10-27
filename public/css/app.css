@@ -2564,6 +2564,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .challenge-target-panel { flex-direction: column; align-items: flex-start; }
     .challenge-target-panel .button { width: 100%; }
     .form-row-2 { grid-template-columns: 1fr; }
+    .challenge-grid { grid-template-columns: 1fr; }
+    .challenge-card { padding: 18px; }
+}
+
+@media (max-width: 640px) {
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw;
+    }
+    .challenge-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .challenge-card-foot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .table-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+    .dialog-panel {
+        max-width: calc(100vw - 24px) !important;
+        margin: 12px auto !important;
+        padding: 18px 14px !important;
+    }
+    .admin-stat-grid, .stats-grid, .team-entry-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 420px) {
@@ -2575,6 +2603,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     .form-row { grid-template-columns: 1fr; gap: 0; }
     .op-stats { grid-template-columns: 1fr; }
     .op-card { padding: 16px; }
+    .auth-aside-content h1 { font-size: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
