@@ -369,18 +369,28 @@
         }
         .poster-img-wrap {
             position: relative;
-            background: #000;
+            background: #090614;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
         }
         .poster-img-wrap img {
+            max-width: 380px;
             width: 100%;
             height: auto;
             display: block;
             object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            image-rendering: -webkit-optimize-contrast;
             transition: transform 0.4s ease;
         }
         .poster-card:hover .poster-img-wrap img {
             transform: scale(1.02);
+            border-color: var(--padc-purple-bright);
         }
         .poster-body {
             padding: 22px 24px;
@@ -388,6 +398,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-grow: 1;
         }
         .poster-badge {
             display: inline-block;
@@ -437,11 +448,28 @@
             transform: translateY(-4px);
             box-shadow: 0 16px 36px rgba(168, 85, 247, 0.2);
         }
-        .individual-card img {
+        .individual-img-wrap {
+            background: #090614;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .individual-img-wrap img {
+            max-width: 240px;
             width: 100%;
             height: auto;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            image-rendering: -webkit-optimize-contrast;
+            transition: transform 0.3s ease;
+        }
+        .individual-card:hover .individual-img-wrap img {
+            transform: scale(1.03);
+            border-color: var(--padc-purple-bright);
         }
         .individual-body {
             padding: 18px 20px;
@@ -773,7 +801,9 @@
             <div class="individual-trio-grid">
                 <!-- Hannah C. Alfaro (Top 9) -->
                 <div class="individual-card">
-                    <img src="{{ asset('images/landing/hannah_alfaro_top9.jpg') }}" alt="Hannah C. Alfaro - Top 9">
+                    <div class="individual-img-wrap">
+                        <img src="{{ asset('images/landing/hannah_alfaro_top9.jpg') }}" alt="Hannah C. Alfaro - Top 9">
+                    </div>
                     <div class="individual-body">
                         <span class="individual-rank-tag">🏅 INDIVIDUAL SCORE: TOP 9</span>
                         <h4>ALFARO, HANNAH C.</h4>
@@ -784,7 +814,9 @@
 
                 <!-- Arvin M. Dela Rosa (Top 10) -->
                 <div class="individual-card" style="border-color: var(--padc-purple-bright);">
-                    <img src="{{ asset('images/landing/arvin_dela_rosa_top10.jpg') }}" alt="Arvin M. Dela Rosa - Top 10">
+                    <div class="individual-img-wrap">
+                        <img src="{{ asset('images/landing/arvin_dela_rosa_top10.jpg') }}" alt="Arvin M. Dela Rosa - Top 10">
+                    </div>
                     <div class="individual-body">
                         <span class="individual-rank-tag" style="color: var(--padc-gold);">🏅 INDIVIDUAL SCORE: TOP 10</span>
                         <h4>DELA ROSA, ARVIN M.</h4>
@@ -795,7 +827,9 @@
 
                 <!-- Rhoss Dhenver M. Pineda, Jr. (Top 11) -->
                 <div class="individual-card">
-                    <img src="{{ asset('images/landing/rhoss_pineda_top11.jpg') }}" alt="Rhoss Dhenver M. Pineda, Jr. - Top 11">
+                    <div class="individual-img-wrap">
+                        <img src="{{ asset('images/landing/rhoss_pineda_top11.jpg') }}" alt="Rhoss Dhenver M. Pineda, Jr. - Top 11">
+                    </div>
                     <div class="individual-body">
                         <span class="individual-rank-tag">🏅 INDIVIDUAL SCORE: TOP 11</span>
                         <h4>PINEDA, RHOSS DHENVER M., JR.</h4>
