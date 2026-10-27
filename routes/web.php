@@ -27,17 +27,23 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Challenge area. Active contestants and administrators can browse,
-    // view, and submit flags (for scoring or administrative verification).
-    Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges');
-    Route::get('/challenges/{challenge:slug}', [ChallengeController::class, 'show'])->name('challenges.show');
-    Route::post('/challenges/{challenge:slug}/submissions', [ChallengeController::class, 'submit'])->name('challenges.submit');
+    // Challenge arena. Active contestants and administrators can browse,
+    // view, and submit flags. Mapped primarily to /arena (with /challenges alias)
+    // so participant browsers never get blocked by stale container-port redirects.
+    Route::get('/arena', [ChallengeController::class, 'index'])->name('challenges');
+    Route::get('/arena/{challenge:slug}', [ChallengeController::class, 'show'])->name('challenges.show');
+    Route::post('/arena/{challenge:slug}/submissions', [ChallengeController::class, 'submit'])->name('challenges.submit');
+    Route::get('/arena/{challenge:slug}/target', [ChallengeTargetController::class, 'show'])->name('challenges.target');
+    Route::post('/arena/{challenge:slug}/target/verify', [ChallengeTargetController::class, 'verify'])->name('challenges.target.verify');
+    Route::get('/arena/{challenge:slug}/download', [ChallengeController::class, 'download'])->name('challenges.download');
 
-    // The internal challenge target website may be opened by any
-    // active authenticated user (contestants and administrators).
-    Route::get('/challenges/{challenge:slug}/target', [ChallengeTargetController::class, 'show'])->name('challenges.target');
-    Route::post('/challenges/{challenge:slug}/target/verify', [ChallengeTargetController::class, 'verify'])->name('challenges.target.verify');
-    Route::get('/challenges/{challenge:slug}/download', [ChallengeController::class, 'download'])->name('challenges.download');
+    // Dual-alias fallback routes for /challenges:
+    Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.legacy');
+    Route::get('/challenges/{challenge:slug}', [ChallengeController::class, 'show']);
+    Route::post('/challenges/{challenge:slug}/submissions', [ChallengeController::class, 'submit']);
+    Route::get('/challenges/{challenge:slug}/target', [ChallengeTargetController::class, 'show']);
+    Route::post('/challenges/{challenge:slug}/target/verify', [ChallengeTargetController::class, 'verify']);
+    Route::get('/challenges/{challenge:slug}/download', [ChallengeController::class, 'download']);
 
     Route::middleware('role:contestant')->prefix('teams')->name('teams.')->group(function (): void {
         Route::get('/', [TeamController::class, 'index'])->name('index');

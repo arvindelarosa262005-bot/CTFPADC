@@ -21,6 +21,13 @@ class SecurityHeaders
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+        // Prevent browsers from caching stale 301 redirects to container ports
+        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+
+        // Instruct Edge/Chrome to purge old cached 301 redirects without touching cookies/session
+        $response->headers->set('Clear-Site-Data', '"cache"');
+
         return $response;
     }
 }
