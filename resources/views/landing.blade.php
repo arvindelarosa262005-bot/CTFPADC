@@ -432,6 +432,101 @@
             color: var(--muted);
         }
 
+        /* Legacy Pioneers Showcase (Team 4C_ITCIANS) */
+        .legacy-team-banner {
+            background: linear-gradient(135deg, rgba(24, 17, 53, 0.95), rgba(9, 6, 20, 0.98));
+            border: 1px solid var(--padc-border);
+            border-radius: 14px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            margin-bottom: 50px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+        .legacy-team-banner:hover {
+            border-color: var(--padc-purple-bright);
+            box-shadow: 0 20px 45px rgba(168, 85, 247, 0.25);
+        }
+        .legacy-img-wrap {
+            background: #090614;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            height: 100%;
+        }
+        .legacy-img-wrap img {
+            width: 100%;
+            height: auto;
+            max-height: 360px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            image-rendering: -webkit-optimize-contrast;
+            transition: transform 0.4s ease;
+        }
+        .legacy-team-banner:hover .legacy-img-wrap img {
+            transform: scale(1.02);
+        }
+        .legacy-body {
+            padding: 24px 30px 24px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .legacy-badge {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 5px 12px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--padc-purple-bright);
+            border-radius: 4px;
+            color: var(--padc-purple-bright);
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+        .legacy-body h3 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-bright);
+            letter-spacing: -0.01em;
+        }
+        .legacy-body p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+        .legacy-operatives-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+        }
+        .legacy-op-tag {
+            background: rgba(14, 9, 31, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text-bright);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legacy-op-tag strong {
+            color: var(--padc-gold);
+        }
+
         /* Individual Champions Grid (Top 7, 9, 10, 11) */
         .individual-trio-grid {
             display: grid;
@@ -594,6 +689,12 @@
             }
             .posters-showcase-grid {
                 grid-template-columns: 1fr;
+            }
+            .legacy-team-banner {
+                grid-template-columns: 1fr;
+            }
+            .legacy-body {
+                padding: 0 24px 24px 24px;
             }
             .individual-trio-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -797,6 +898,29 @@
                             <br>
                             <span style="color: var(--muted);">COACH: Mr. Erika Jane D. Tadeja</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legacy Pioneers: Team 4C_ITCIANS (Previous Year Hack4Gov Representatives) -->
+            <div class="legacy-team-banner">
+                <div class="legacy-img-wrap">
+                    <img src="{{ asset('images/landing/team_4c_itcians_legacy.jpg') }}" alt="Team 4C_ITCIANS - Hack4Gov Regional Cyber Challenge Pioneer Team">
+                </div>
+                <div class="legacy-body">
+                    <span class="legacy-badge">🎖️ PIONEERING CONTENDERS // PREVIOUS YEAR REPRESENTATIVES</span>
+                    <h3>TEAM 4C_ITCIANS</h3>
+                    <p>
+                        The trailblazers who represented Occidental Mindoro State College &ndash; Mamburao Campus BSIT and Supreme Student Government at the 
+                        prestigious Hack4Gov Regional Cyber Challenge. Their competitive groundwork and tactical spirit paved 
+                        the path for PADC's succeeding champion teams.
+                    </p>
+                    <div class="legacy-operatives-grid">
+                        <div class="legacy-op-tag">⚡ MAUWIN <strong>"RENZ"</strong> DELADIA</div>
+                        <div class="legacy-op-tag">⚡ CLARENCE <strong>"KL4RENZ"</strong> TAJONERA</div>
+                        <div class="legacy-op-tag">⚡ ROLAND <strong>"MOTE"</strong> CAMUS</div>
+                        <div class="legacy-op-tag">⚡ MARCELO <strong>"NOBY"</strong> TAPIL</div>
+                        <div class="legacy-op-tag">⚡ SHANE REY <strong>"MINAMI"</strong> NEPOMUCENO</div>
                     </div>
                 </div>
             </div>
