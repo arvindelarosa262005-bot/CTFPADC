@@ -1,0 +1,20 @@
+================================================================================
+CASE EVIDENCE NOTES - #IR-2026-0941
+================================================================================
+
+Case: Gateway Anomaly & Suspicious Buffer Capture
+Target Host: GATEWAY-SRV-04 (10.140.22.10)
+Evidence Artifacts:
+  - incident_report.log (System event timeline and socket transition records)
+  - memory_capture.bin  (Extracted raw volatile memory buffer from session #4401)
+
+Examiner Observations:
+- Ingress session #4401 triggered an anomalous transfer threshold.
+- The volatile memory buffer was dumped directly from kernel memory space before socket teardown.
+- The binary payload appears to contain a mixture of structured headers, binary metadata, and unindexed memory segments.
+- Initial triage indicates sensitive internal data may have been staged inside the captured stream.
+
+Next Steps:
+- Perform forensic inspection of the binary capture.
+- Identify all embedded data structures and extract concealed information.
+================================================================================

@@ -1,0 +1,35 @@
+================================================================================
+P4DC SECURITY OPERATIONS CENTER - INCIDENT INVESTIGATION LOG
+INCIDENT ID: IR-2026-0941
+TARGET ASSET: GATEWAY-SRV-04.P4DC.INTERNAL (10.140.22.10)
+CLASSIFICATION: CONFIDENTIAL // SOC TRIAGE REPORT
+EXTRACTION DATE: 2026-10-16 02:22:15 UTC
+LEAD ANALYST: IR-OPERATOR-31
+STATUS: VOLATILE MEMORY BUFFER DUMPED FOR FORENSIC ANALYSIS
+================================================================================
+
+[2026-10-16 02:14:01.010 UTC] [KERNEL] Linux gateway-srv-04 6.8.0-45-generic #45-Ubuntu SMP
+[2026-10-16 02:14:01.042 UTC] [SYSTEM] System audit daemon (auditd) active (PID: 812).
+[2026-10-16 02:14:01.190 UTC] [KERNEL] Core memory protection flags: ASLR=2, NX=1, SMEP=1, SMAP=1.
+[2026-10-16 02:14:02.320 UTC] [NET] Interface eth0: Link is Up - 10Gbps/Full - flow control rx/tx.
+[2026-10-16 02:14:02.325 UTC] [NET] IPv4 assigned: 10.140.22.10/24, broadcast 10.140.22.255.
+[2026-10-16 02:14:03.011 UTC] [SECURITY] AppArmor enabled; 48 network profiles enforced.
+[2026-10-16 02:14:03.490 UTC] [SERVICES] TLS termination proxy daemon (stunnel5) running on port 8443.
+[2026-10-16 02:14:05.802 UTC] [AUTH] PAM authentication policy reloaded: strict_token_auth=1.
+[2026-10-16 02:14:07.199 UTC] [FIREWALL] iptables filter table loaded (1,280 rules active).
+[2026-10-16 02:14:10.450 UTC] [CONN] Inbound TCP connection from 192.168.100.84:48120 accepted.
+[2026-10-16 02:14:10.512 UTC] [TLS] Handshake completed: TLSv1.3 / TLS_AES_256_GCM_SHA384.
+[2026-10-16 02:14:10.515 UTC] [TLS] Peer certificate subject: CN=node-agent-84.infra.p4dc.internal.
+[2026-10-16 02:14:11.890 UTC] [SESSION] Allocated session buffer #4401 at memory address 0x7ffd9820a000.
+[2026-10-16 02:14:12.304 UTC] [MONITOR] Heuristic anomaly detector triggered: rule HEUR_SUSPICIOUS_PAYLOAD_LEN.
+[2026-10-16 02:14:12.308 UTC] [MONITOR] Payload stream captured for forensic triage; size=8,192 bytes.
+[2026-10-16 02:14:13.001 UTC] [ISOLATION] Ingress channel quarantined; routing to memory snapshot cache.
+[2026-10-16 02:14:14.220 UTC] [DIAGNOSTIC] Checksum verification: SHA256=7f07b8b45e6b40755bf3521fa09737019b1808acba961abd373c4018a3ce6c63.
+[2026-10-16 02:14:15.012 UTC] [DIAGNOSTIC] Shannon entropy score: 5.42 (compressed/encrypted data stream).
+[2026-10-16 02:14:16.890 UTC] [STORAGE] Dumping raw packet buffer 0x7ffd9820a000 to evidence file: memory_capture.bin.
+[2026-10-16 02:14:17.001 UTC] [KERNEL] Dump completed. Preserving socket descriptor FD=18.
+[2026-10-16 02:14:18.440 UTC] [SYSTEM] Primary gateway node quarantined. Failover to GATEWAY-SRV-05 initiated.
+[2026-10-16 02:15:00.000 UTC] [EVIDENCE] Memory buffer extracted into raw forensic container 'memory_capture.bin'.
+================================================================================
+END OF INCIDENT LOG STREAM
+================================================================================

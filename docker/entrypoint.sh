@@ -100,10 +100,12 @@ php artisan view:clear || true
 echo "Running migrations..."
 php artisan migrate --force || true
 
-# 5. Seed challenges
+# 5. Seed challenges and prepare evidence files
 echo "Seeding challenges..."
 php artisan db:seed --class=SourceTrailChallengeSeeder --force || true
 php artisan db:seed --class=CtfChallengesSeeder --force || true
+php scripts/generate_gateway_evidence.php || true
+php artisan storage:link || true
 
 # 6. Seed default admin if no admin exists
 echo "Checking default admin..."

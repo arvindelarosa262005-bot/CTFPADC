@@ -77,13 +77,17 @@ class Challenge extends Model
      * challenges point at the configured https URL. No server-side
      * request is ever made to the target from this application.
      */
-    public function resolveTargetUrl(): string
+    public function resolveTargetUrl(): ?string
     {
         if ($this->target_type === 'external' && filled($this->target_url)) {
             return $this->target_url;
         }
 
-        return route('challenges.target', ['challenge' => $this]);
+        if ($this->target_type === 'internal' && view()->exists("challenges.targets.{$this->slug}")) {
+            return route('challenges.target', ['challenge' => $this]);
+        }
+
+        return null;
     }
 
     public function hasAttachment(): bool

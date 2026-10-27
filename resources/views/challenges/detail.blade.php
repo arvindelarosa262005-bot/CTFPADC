@@ -105,13 +105,28 @@
                     @endif
                 </div>
             </div>
-        @else
+        @elseif ($challenge->hasAttachment())
+            <div>
+                <div class="eyebrow">ATTACHED EVIDENCE</div>
+                <h2>Challenge Attachment</h2>
+                <p>Download the challenge file and analyze its contents.</p>
+                <div style="margin-top: 14px;">
+                    <a class="button button-outline" href="{{ route('challenges.download', ['challenge' => $challenge]) }}" download>📄 Download File ({{ $challenge->downloadFilename() }}) &darr;</a>
+                </div>
+            </div>
+        @elseif (filled($targetUrl))
             <div>
                 <div class="eyebrow">TARGET</div>
                 <h2>Challenge Website</h2>
                 <p>Open the target in a new tab and investigate it.</p>
             </div>
             <a class="button button-outline" href="{{ $targetUrl }}" target="_blank" rel="noopener noreferrer">Open Challenge Website <span aria-hidden="true">&nearr;</span></a>
+        @else
+            <div>
+                <div class="eyebrow">MISSION OBJECTIVE</div>
+                <h2>Intel &amp; Decryption</h2>
+                <p>Use the intelligence details provided above to investigate, decode the secrets, and extract the flag.</p>
+            </div>
         @endif
     </section>
 

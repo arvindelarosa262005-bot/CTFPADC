@@ -12,7 +12,12 @@ use App\Http\Controllers\Admin\AdminTeamController;
 use App\Http\Controllers\Admin\AdminChallengeController;
 use App\Http\Controllers\Admin\AdminScoreController;
 use App\Http\Controllers\Contestant\TeamController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
+
+// Public PADC BSIT Landing Page & Showcase
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
+Route::get('/padc', [LandingPageController::class, 'index'])->name('landing');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -25,7 +30,7 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware(['auth', 'active'])->group(function (): void {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Challenge arena. Active contestants and administrators can browse,
     // view, and submit flags. Mapped primarily to /arena (with /challenges alias)

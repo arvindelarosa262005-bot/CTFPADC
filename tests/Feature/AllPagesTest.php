@@ -19,7 +19,9 @@ class AllPagesTest extends TestCase
         $this->get('/register')->assertOk()->assertSee('Create your account');
         $this->get('/auth/google')->assertRedirect();
 
-        $this->get('/')->assertRedirect(route('login'));
+        $this->get('/')->assertOk()->assertSee('PADC');
+        $this->get('/padc')->assertOk()->assertSee('PADC');
+        $this->get('/dashboard')->assertRedirect(route('login'));
         $this->get('/challenges')->assertRedirect(route('login'));
         $this->get('/teams')->assertRedirect(route('login'));
         $this->get('/teams/join')->assertRedirect(route('login'));

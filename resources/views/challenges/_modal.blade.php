@@ -152,8 +152,22 @@
                         </div>
                     @endif
                 </div>
-            @elseif (filled($targetUrl))
-                <p>
+            @elseif ($challenge->hasAttachment())
+                <div class="modal-evidence-files" style="margin-top: 16px; padding: 14px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--line, #2c352d); border-radius: 8px;">
+                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent, #5ef285); margin-bottom: 10px;">
+                        Attached Evidence File
+                    </div>
+                    <div>
+                        <a class="modal-evidence-link" href="{{ route('challenges.download', ['challenge' => $challenge]) }}" download style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--panel-raised, #1d241d); border: 1px solid var(--line, #2c352d); border-radius: 6px; color: var(--text, #edf2e9); text-decoration: none; font-size: 13px;">
+                            <span>📄 <strong>{{ $challenge->downloadFilename() }}</strong> <span style="font-size: 11px; color: var(--muted, #9ca79b);">(Challenge Attachment)</span></span>
+                            <span style="color: var(--accent, #5ef285); font-weight: bold; font-size: 12px;">Download File &darr;</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
+
+            @if (filled($targetUrl) && !in_array($challenge->slug, ['the-unwritten-algorithm', 'rsa-oracle']))
+                <p style="margin-top: 14px;">
                     <a class="modal-link-external" href="{{ $targetUrl }}" target="_blank" rel="noopener noreferrer"><strong>Open challenge website</strong><span class="external-arrow">&nearr;</span></a>
                 </p>
             @endif
