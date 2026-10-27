@@ -13,10 +13,7 @@
     RewriteRule ^challenges/source-trail/(.*)$ targets/source-trail/$1 [L]
     RewriteRule ^challenges/secret/(.*)$ targets/secret/$1 [L]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+    # Trailing slash handling is managed cleanly by Laravel without injecting internal container ports.
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-f

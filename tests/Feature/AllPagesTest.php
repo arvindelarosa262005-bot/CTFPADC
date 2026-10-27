@@ -47,7 +47,9 @@ class AllPagesTest extends TestCase
 
         // Challenges
         $this->get('/challenges')->assertOk()->assertSee('Source Trail');
+        $this->get('/challenges/')->assertOk()->assertSee('Source Trail');
         $this->get('/challenges/source-trail')->assertOk()->assertSee('Source Trail');
+        $this->get('/challenges/source-trail/')->assertOk()->assertSee('Source Trail');
         $this->get('/challenges/source-trail/target')->assertOk();
 
         // Teams
