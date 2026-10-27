@@ -432,11 +432,11 @@
             color: var(--muted);
         }
 
-        /* Individual Champions Triad */
+        /* Individual Champions Grid (Top 7, 9, 10, 11) */
         .individual-trio-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
             margin-bottom: 70px;
         }
         .individual-card {
@@ -596,7 +596,7 @@
                 grid-template-columns: 1fr;
             }
             .individual-trio-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             .landing-stats-bar {
                 grid-template-columns: repeat(2, 1fr);
@@ -608,6 +608,9 @@
         @media (max-width: 640px) {
             .hero-title {
                 font-size: 34px;
+            }
+            .individual-trio-grid {
+                grid-template-columns: 1fr;
             }
             .landing-stats-bar {
                 grid-template-columns: 1fr;
@@ -731,9 +734,9 @@
                 <span class="stat-highlight">Teams CIPHERA &amp; 404 Not Defeated</span>
             </div>
             <div class="stat-hud-card">
-                <span class="stat-number" style="color: var(--padc-purple-bright);">Top 10</span>
+                <span class="stat-number" style="color: var(--padc-purple-bright);">Top 7–11</span>
                 <span class="stat-label">Individual Elite</span>
-                <span class="stat-highlight">Regional Top Individual Performers</span>
+                <span class="stat-highlight">4 Regional Top Individual Scorers</span>
             </div>
             <div class="stat-hud-card">
                 <span class="stat-number" style="color: var(--padc-gold);">100%</span>
@@ -771,7 +774,7 @@
                         <div style="font-family: var(--mono); font-size: 12px; color: var(--padc-purple-bright); padding-top: 10px; border-top: 1px solid var(--line);">
                             <strong>OPERATIVES:</strong> ITOSHI &middot; FAE &middot; VOXEL &middot; ZHEROSS
                             <br>
-                            <span style="color: var(--muted);">COACH: Mr. Roland Roy A. Camus</span>
+                            <span style="color: var(--muted);">COACH: Mr. Roland Ray A. Camus</span>
                         </div>
                     </div>
                 </div>
@@ -792,19 +795,32 @@
                         <div style="font-family: var(--mono); font-size: 12px; color: var(--padc-purple-bright); padding-top: 10px; border-top: 1px solid var(--line);">
                             <strong>OPERATIVES:</strong> DAZZY &middot; FINN &middot; JYNX &middot; CLOUD
                             <br>
-                            <span style="color: var(--muted);">COACH: Ms. Erika Jane D. Tadeja</span>
+                            <span style="color: var(--muted);">COACH: Mr. Erika Jane D. Tadeja</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Individual Top Performers Triad (Arvin, Hannah, Rhoss) -->
+            <!-- Individual Top Performers (Raylynndon, Hannah, Arvin, Rhoss) -->
             <div style="margin-bottom: 24px; text-align: center;">
                 <h3 style="font-size: 24px; color: var(--text-bright); margin-bottom: 8px;">Top Individual Regional Scorers</h3>
-                <p style="color: var(--muted); font-size: 14px; margin: 0;">Recognizing the individual excellence of our PADC BSIT operatives across MIMAROPA.</p>
+                <p style="color: var(--muted); font-size: 14px; margin: 0;">Recognizing the individual excellence of our PADC BSIT operatives across HackForGov5 MIMAROPA 2026.</p>
             </div>
 
             <div class="individual-trio-grid">
+                <!-- Raylynndon M. Alfaro (Top 7) -->
+                <div class="individual-card">
+                    <div class="individual-img-wrap">
+                        <img src="{{ asset('images/landing/raylynndon_alfaro_top7.jpg') }}" alt="Raylynndon M. Alfaro - Top 7">
+                    </div>
+                    <div class="individual-body">
+                        <span class="individual-rank-tag">🏅 INDIVIDUAL SCORE: TOP 7</span>
+                        <h4>ALFARO, RAYLYNNDON M.</h4>
+                        <span>Team CIPHERA &middot; Coach: Mr. Roland Ray A. Camus</span>
+                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov5 MIMAROPA 2026</span>
+                    </div>
+                </div>
+
                 <!-- Hannah C. Alfaro (Top 9) -->
                 <div class="individual-card">
                     <div class="individual-img-wrap">
@@ -813,8 +829,8 @@
                     <div class="individual-body">
                         <span class="individual-rank-tag">🏅 INDIVIDUAL SCORE: TOP 9</span>
                         <h4>ALFARO, HANNAH C.</h4>
-                        <span>Team 404 Not Defeated &middot; Coach: Ms. Erika Jane D. Tadeja</span>
-                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov MIMAROPA 2024</span>
+                        <span>Team 404 Not Defeated &middot; Coach: Mr. Erika Jane D. Tadeja</span>
+                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov5 MIMAROPA 2026</span>
                     </div>
                 </div>
 
@@ -826,8 +842,8 @@
                     <div class="individual-body">
                         <span class="individual-rank-tag" style="color: var(--padc-gold);">🏅 INDIVIDUAL SCORE: TOP 10</span>
                         <h4>DELA ROSA, ARVIN M.</h4>
-                        <span>Team 404 Not Defeated &middot; Coach: Ms. Erika Jane D. Tadeja</span>
-                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov MIMAROPA 2024</span>
+                        <span>Team 404 Not Defeated &middot; Coach: Mr. Erika Jane D. Tadeja</span>
+                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov5 MIMAROPA 2026</span>
                     </div>
                 </div>
 
@@ -839,8 +855,8 @@
                     <div class="individual-body">
                         <span class="individual-rank-tag">🏅 INDIVIDUAL SCORE: TOP 11</span>
                         <h4>PINEDA, RHOSS DHENVER M., JR.</h4>
-                        <span>Team CIPHERA &middot; Coach: Mr. Roland Roy A. Camus</span>
-                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov MIMAROPA 2024</span>
+                        <span>Team CIPHERA &middot; Coach: Mr. Roland Ray A. Camus</span>
+                        <span style="font-family: var(--mono); font-size: 11px; color: var(--padc-gold);">HackForGov5 MIMAROPA 2026</span>
                     </div>
                 </div>
             </div>
