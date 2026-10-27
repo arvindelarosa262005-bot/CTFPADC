@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Maple Street Community Library — books, events and study rooms for the neighbourhood.">
     <title>Maple Street Community Library</title>
-    <link rel="stylesheet" href="{{ asset('challenges/source-trail/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('targets/source-trail/style.css') }}">
     <!--
         : strip the staging notes before launch.
         Page styling lives in style.css, behaviour lives in script.js.
@@ -88,6 +88,6 @@
         <span>&copy; 1974–2026 Maple Street Community Library</span>
     </footer>
 
-    <script src="{{ asset('challenges/source-trail/script.js') }}" defer></script>
+    <script src="{{ asset('targets/source-trail/script.js') }}" defer></script>
 </body>
 </html>
