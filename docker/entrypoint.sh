@@ -103,6 +103,7 @@ php artisan migrate --force || true
 # 5. Seed challenges
 echo "Seeding challenges..."
 php artisan db:seed --class=SourceTrailChallengeSeeder --force || true
+php artisan db:seed --class=CtfChallengesSeeder --force || true
 
 # 6. Seed default admin if no admin exists
 echo "Checking default admin..."
