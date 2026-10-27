@@ -233,10 +233,18 @@ class CtfChallengesSeeder extends Seeder
         ];
 
         foreach ($challenges as $data) {
+            $existing = Challenge::where('slug', $data['slug'])->first();
+
+            // Default: Source Trail is active as the starter challenge.
+            // All other challenges start staged/hidden until Admin releases them.
+            // If already set in database, preserve the admin's chosen state.
+            $isActive = $existing !== null ? (bool) $existing->is_active : ($data['slug'] === 'source-trail');
+
             Challenge::updateOrCreate(
                 ['slug' => $data['slug']],
                 array_merge($data, [
-                    'published_at' => now(),
+                    'is_active' => $isActive,
+                    'published_at' => $existing?->published_at ?? ($isActive ? now() : null),
                 ])
             );
         }

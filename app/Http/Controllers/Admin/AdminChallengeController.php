@@ -26,12 +26,16 @@ class AdminChallengeController extends Controller
     {
         $challenges = Challenge::query()
             ->orderByDesc('is_active')
-            ->orderByDesc('published_at')
-            ->orderBy('title')
+            ->orderBy('id')
             ->get();
+
+        $activeCount = $challenges->where('is_active', true)->count();
+        $hiddenCount = $challenges->where('is_active', false)->count();
 
         return view('admin.challenges.index', [
             'challenges' => $challenges,
+            'activeCount' => $activeCount,
+            'hiddenCount' => $hiddenCount,
             'categories' => config('ctf.categories'),
             'difficulties' => config('ctf.difficulties'),
         ]);
@@ -89,6 +93,41 @@ class AdminChallengeController extends Controller
         return redirect()
             ->route('admin.challenges.index')
             ->with('status', 'Challenge updated.');
+    }
+
+    public function toggle(Challenge $challenge): RedirectResponse
+    {
+        $newActive = ! (bool) $challenge->is_active;
+
+        $challenge->update([
+            'is_active' => $newActive,
+            'published_at' => $newActive ? ($challenge->published_at ?? now()) : $challenge->published_at,
+        ]);
+
+        if ($newActive) {
+            return back()->with('status', "🚀 '{$challenge->title}' has been RELEASED and is now LIVE for all contestants!");
+        }
+
+        return back()->with('status', "🔒 '{$challenge->title}' has been HIDDEN from contestants.");
+    }
+
+    public function bulkRelease(): RedirectResponse
+    {
+        Challenge::query()->update([
+            'is_active' => true,
+            'published_at' => now(),
+        ]);
+
+        return back()->with('status', '🚀 All challenges have been RELEASED and are now LIVE to all contestants!');
+    }
+
+    public function bulkHide(): RedirectResponse
+    {
+        Challenge::query()->update([
+            'is_active' => false,
+        ]);
+
+        return back()->with('status', '🔒 All challenges have been HIDDEN from contestants (Staged mode).');
     }
 
     public function destroy(Challenge $challenge): RedirectResponse

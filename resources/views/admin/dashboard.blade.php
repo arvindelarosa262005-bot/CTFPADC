@@ -34,6 +34,17 @@
             <small id="stat-points-note">{{ $totalPointsEarned > 0 ? 'Verified points across ' . number_format($totalFlagsCaptured) . ' captured flag(s)' : 'Ready to be earned' }}</small>
             <i id="stat-points-badge">{{ $totalPointsEarned > 0 ? 'REAL-TIME SCORING TELEMETRY ACTIVE' : 'PLACEHOLDER · VERIFIED SCORING NOT ACTIVE' }}</i>
         </article>
+        <article class="admin-stat" style="border-color: rgba(0, 240, 255, 0.35);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>RANGE CHALLENGES</span>
+                <span class="status-dot" style="background: #00ff9d; box-shadow: 0 0 8px #00ff9d;"></span>
+            </div>
+            <strong style="color: #00ff9d;">{{ $liveChallengesCount }} <span style="font-size: 13px; color: var(--muted); font-weight: 500;">/ {{ $totalChallengesCount }} LIVE</span></strong>
+            <small><a href="{{ route('admin.challenges.index') }}" style="color: var(--neon-cyan); text-decoration: none; font-weight: 600;">Control &amp; Release Challenges →</a></small>
+            <i style="color: {{ $liveChallengesCount > 0 ? 'var(--neon-cyan)' : 'var(--amber)' }}; font-style: normal; font-size: 10px; font-family: var(--mono); letter-spacing: 0.05em;">
+                {{ $totalChallengesCount - $liveChallengesCount }} CHALLENGE(S) STAGED/HIDDEN
+            </i>
+        </article>
     </section>
 
     <!-- Real-Time CTF Leaderboard & Solves Monitor -->

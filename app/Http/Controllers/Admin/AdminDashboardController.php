@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminAuditLog;
+use App\Models\Challenge;
 use App\Models\Team;
 use App\Models\TeamMembership;
 use App\Models\User;
@@ -53,6 +54,8 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard', [
             'registeredUsers' => User::count(),
             'existingTeams' => Team::count(),
+            'liveChallengesCount' => Challenge::where('is_active', true)->count(),
+            'totalChallengesCount' => Challenge::count(),
             'totalPointsEarned' => $totalPointsEarned,
             'totalFlagsCaptured' => $totalFlagsCaptured,
             'recentSolves' => $recentSolves,

@@ -74,6 +74,9 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::get('/challenges', [AdminChallengeController::class, 'index'])->name('challenges.index');
         Route::get('/challenges/create', [AdminChallengeController::class, 'create'])->name('challenges.create');
         Route::post('/challenges', [AdminChallengeController::class, 'store'])->name('challenges.store');
+        Route::post('/challenges/bulk-release', [AdminChallengeController::class, 'bulkRelease'])->name('challenges.bulk_release');
+        Route::post('/challenges/bulk-hide', [AdminChallengeController::class, 'bulkHide'])->name('challenges.bulk_hide');
+        Route::post('/challenges/{challenge:slug}/toggle', [AdminChallengeController::class, 'toggle'])->name('challenges.toggle');
         Route::get('/challenges/{challenge:slug}/edit', [AdminChallengeController::class, 'edit'])->name('challenges.edit');
         Route::patch('/challenges/{challenge:slug}', [AdminChallengeController::class, 'update'])->name('challenges.update');
         Route::delete('/challenges/{challenge:slug}', [AdminChallengeController::class, 'destroy'])->name('challenges.destroy');
