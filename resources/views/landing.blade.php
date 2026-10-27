@@ -238,14 +238,20 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--padc-border);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(168, 85, 247, 0.2);
-            background: var(--panel-raised);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(168, 85, 247, 0.25);
+            background: #090614;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .hero-visual-frame img {
             width: 100%;
             height: auto;
+            max-height: 480px;
+            object-fit: contain;
             display: block;
             transition: transform 0.5s ease;
+            image-rendering: -webkit-optimize-contrast;
         }
         .hero-visual-frame:hover img {
             transform: scale(1.02);
@@ -704,7 +710,7 @@
             </div>
 
             <div class="hero-visual-frame">
-                <img src="{{ asset('images/landing/padc_hero_cyber_range.jpg') }}" alt="PADC Cyber Defense Command Arena">
+                <img src="{{ asset('images/landing/padc_tactical_hero.jpg') }}" alt="PADC 2026 Tactical Cyber Arena">
                 <div class="hero-frame-hud">
                     <span style="color: var(--padc-purple-bright);">● PURPLE ARENA // LIVE DEFENSE</span>
                     <span style="color: var(--padc-gold);">P4DC-2026 TACTICAL</span>
