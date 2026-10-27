@@ -105,7 +105,7 @@ echo "Seeding challenges..."
 php artisan db:seed --class=SourceTrailChallengeSeeder --force || true
 php artisan db:seed --class=CtfChallengesSeeder --force || true
 php scripts/generate_gateway_evidence.php || true
-php artisan storage:link || true
+php artisan storage:link --force || true
 
 # 6. Seed default admin if no admin exists
 echo "Checking default admin..."
