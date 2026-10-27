@@ -68,6 +68,8 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.role');
         Route::patch('/users/{user}/status', [AdminUserController::class, 'updateStatus'])->name('users.status');
         Route::patch('/users/{user}/team', [AdminUserController::class, 'updateTeam'])->name('users.team');
+        Route::post('/users/{user}/ai-flag/clear', [AdminUserController::class, 'clearAiFlag'])->name('users.ai_clear');
+        Route::post('/users/{user}/ai-flag/disqualify', [AdminUserController::class, 'disqualifyForAi'])->name('users.ai_disqualify');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
         Route::delete('/users/{user}/solves', [AdminUserController::class, 'destroySolves'])->name('users.solves.destroy');
         Route::delete('/memberships/{membership}', [AdminTeamController::class, 'destroyMembership'])->name('memberships.destroy');

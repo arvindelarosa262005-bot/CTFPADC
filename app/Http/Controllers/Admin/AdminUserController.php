@@ -289,6 +289,46 @@ class AdminUserController extends Controller
             ->with('status', "Verified solves ({$solvesCount} solves, {$pointsSum} points) for user {$user->username} deleted.");
     }
 
+    public function clearAiFlag(User $user): RedirectResponse
+    {
+        $user->update([
+            'is_ai_flagged' => false,
+            'ai_suspicion_score' => 0,
+            'ai_flag_reason' => null,
+        ]);
+
+        AdminAuditLog::create([
+            'actor_user_id' => auth()->id(),
+            'subject_user_id' => $user->id,
+            'action' => 'ai_anticheat.flag_cleared',
+            'details' => ['cleared_by' => auth()->user()->username],
+            'created_at' => now(),
+        ]);
+
+        return back()->with('status', "AI flag and suspicion score cleared for {$user->callsign}.");
+    }
+
+    public function disqualifyForAi(User $user): RedirectResponse
+    {
+        abort_if($user->isAdmin(), 403, 'Administrators cannot be disqualified.');
+
+        $user->update([
+            'is_active' => false,
+            'is_ai_flagged' => true,
+            'ai_flag_reason' => 'Disqualified for Prohibited Generative AI Usage',
+        ]);
+
+        AdminAuditLog::create([
+            'actor_user_id' => auth()->id(),
+            'subject_user_id' => $user->id,
+            'action' => 'ai_anticheat.disqualified',
+            'details' => ['operative' => $user->callsign, 'action' => 'account_deactivated'],
+            'created_at' => now(),
+        ]);
+
+        return back()->with('status', "Operative {$user->callsign} has been DISQUALIFIED and deactivated for AI usage violation.");
+    }
+
     private function audit(Request $request, User $subject, string $action, array $details): void
     {
         AdminAuditLog::create([

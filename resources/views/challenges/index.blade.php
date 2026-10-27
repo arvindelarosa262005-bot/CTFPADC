@@ -40,8 +40,13 @@
                         <a href="{{ route('challenges.show', ['challenge' => $challenge]) }}">{{ $challenge->title }}</a>
                     </h2>
                     <p class="challenge-teaser">{{ $challenge->description ? str((string) $challenge->description)->limit(160) : 'No description provided.' }}</p>
-                    <div class="challenge-card-foot">
+                    <div class="challenge-card-foot" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                         <span class="challenge-points">{{ number_format($challenge->points) }} pts</span>
+                        @if (isset($firstBloods[$challenge->id]))
+                            <span style="font-family: var(--mono); font-size: 10px; color: #ff5555; background: rgba(255, 68, 68, 0.1); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(255, 68, 68, 0.3);" title="First Blood captured by {{ $firstBloods[$challenge->id]->user?->callsign }}">
+                                🩸 {{ $firstBloods[$challenge->id]->user?->callsign }}
+                            </span>
+                        @endif
                         @if ($solved)
                             <span class="challenge-solved-badge">Solved</span>
                         @else

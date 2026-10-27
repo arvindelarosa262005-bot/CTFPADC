@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminAuditLog;
+use App\Models\AiTelemetryLog;
 use App\Models\Challenge;
 use App\Models\Team;
 use App\Models\TeamMembership;
@@ -51,6 +52,17 @@ class AdminDashboardController extends Controller
             ->limit(10)
             ->get();
 
+        $aiLogs = AiTelemetryLog::with(['user:id,username,nickname', 'challenge:id,title'])
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->get();
+        $flaggedUsers = User::where('is_ai_flagged', true)
+            ->orWhere('ai_suspicion_score', '>', 0)
+            ->orderByDesc('ai_suspicion_score')
+            ->get();
+        $totalAiIncidents = AiTelemetryLog::count();
+        $criticalAiIncidents = AiTelemetryLog::where('severity', 'critical')->count();
+
         return view('admin.dashboard', [
             'registeredUsers' => User::count(),
             'existingTeams' => Team::count(),
@@ -65,6 +77,10 @@ class AdminDashboardController extends Controller
             'teamScorers' => $teamScorers,
             'auditLogs' => $auditLogs,
             'membershipHistory' => $membershipHistory,
+            'aiLogs' => $aiLogs,
+            'flaggedUsers' => $flaggedUsers,
+            'totalAiIncidents' => $totalAiIncidents,
+            'criticalAiIncidents' => $criticalAiIncidents,
         ]);
     }
 

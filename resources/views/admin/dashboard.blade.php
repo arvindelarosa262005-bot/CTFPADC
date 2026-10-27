@@ -272,6 +272,148 @@
         </div>
     </section>
 
+    <!-- ── AI Anti-Cheat & Integrity Sentinel ──────────────────────────────── -->
+    <section class="admin-section" style="border: 1px solid rgba(255, 68, 68, 0.35); background: rgba(20, 10, 15, 0.6); padding: 22px; border-radius: 8px; margin-bottom: 24px;">
+        <div class="section-heading" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+            <div>
+                <div class="eyebrow" style="color: #ff5555;"><span class="status-dot" style="background:#ff5555; box-shadow:0 0 8px #ff5555; display:inline-block; margin-right:6px;"></span>INTEGRITY RADAR <span class="eyebrow-divider">/</span> AI DETECTION</div>
+                <h2 style="color: #fff; font-size: 20px; margin: 4px 0 0;">🤖 AI &amp; Anti-Cheat Surveillance Sentinel</h2>
+                <p style="color: var(--muted); font-size: 13px; margin: 4px 0 0;">
+                    Real-time monitoring laban sa paggamit ng ChatGPT, Claude, at LLM prompt injections gamit ang Canary Honeypots at Client Telemetry.
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div style="padding: 6px 12px; background: rgba(255, 68, 68, 0.15); border: 1px solid rgba(255, 68, 68, 0.4); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: #ff5555;">
+                    CRITICAL CANARY TRIPS: <strong>{{ $criticalAiIncidents }}</strong>
+                </div>
+                <div style="padding: 6px 12px; background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--neon-cyan);">
+                    TOTAL LOGGED INCIDENTS: <strong>{{ $totalAiIncidents }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flagged Operatives Table -->
+        <h3 style="font-size: 14px; color: #ff9999; margin: 0 0 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em;">
+            🚨 Flagged / Suspected Operatives ({{ $flaggedUsers->count() }})
+        </h3>
+        @if ($flaggedUsers->isEmpty())
+            <div class="empty-state admin-empty" style="padding: 20px; background: rgba(0, 255, 157, 0.04); border-color: rgba(0, 255, 157, 0.2);">
+                <span class="empty-symbol" style="color: #00ff9d;">🛡️</span>
+                <div>
+                    <h3 style="color: #00ff9d;">All operatives currently clean</h3>
+                    <p style="color: var(--muted); font-size: 12px;">Walang na-detect na AI honeypot triggers o anomalous clipboard paste speeds.</p>
+                </div>
+            </div>
+        @else
+            <div class="table-scroll" style="margin-bottom: 20px;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>OPERATIVE</th>
+                            <th>TEAM</th>
+                            <th>AI SUSPICION SCORE</th>
+                            <th>PRIMARY EVIDENCE / REASON</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($flaggedUsers as $flagged)
+                            <tr style="background: rgba(255, 68, 68, 0.05);">
+                                <td>
+                                    <strong style="color: #ff5555;">{{ $flagged->callsign }}</strong>
+                                    <small style="display: block; color: var(--faint);">{{ $flagged->email }}</small>
+                                </td>
+                                <td>{{ $flagged->activeTeams->first()?->name ?? 'Solo Operative' }}</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="width: 80px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                                            <div style="width: {{ $flagged->ai_suspicion_score }}%; height: 100%; background: {{ $flagged->ai_suspicion_score >= 70 ? '#ff4444' : '#ffb86c' }};"></div>
+                                        </div>
+                                        <span style="font-family: var(--mono); font-weight: 700; color: {{ $flagged->ai_suspicion_score >= 70 ? '#ff5555' : '#ffb86c' }};">
+                                            {{ $flagged->ai_suspicion_score }}%
+                                        </span>
+                                        @if ($flagged->is_ai_flagged)
+                                            <span class="state-label" style="background: rgba(255, 68, 68, 0.2); color: #ff5555; border-color: rgba(255,68,68,0.5);">CONFIRMED AI</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="color: #fff; font-size: 12px;">{{ $flagged->ai_flag_reason ?: 'Elevated anomalous telemetry' }}</span>
+                                </td>
+                                <td>
+                                    <div class="member-actions">
+                                        <form method="POST" action="{{ route('admin.users.ai_clear', $flagged) }}">
+                                            @csrf
+                                            <button class="small-action" type="submit" title="Reset suspicion score and clear flag">✅ Clear Flag</button>
+                                        </form>
+                                        @if ($flagged->is_active && ! $flagged->isAdmin())
+                                            <form method="POST" action="{{ route('admin.users.ai_disqualify', $flagged) }}" onsubmit="return confirm('Sigurado ka bang idi-DISQUALIFY at idi-deactivate ang account ni {{ $flagged->callsign }} dahil sa paggamit ng AI?');">
+                                                @csrf
+                                                <button class="small-action small-action-danger" type="submit">🚫 Disqualify</button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        <!-- AI Telemetry Event Stream -->
+        <h3 style="font-size: 14px; color: var(--neon-cyan); margin: 18px 0 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em;">
+            📡 Live AI Detection Telemetry Feed
+        </h3>
+        @if ($aiLogs->isEmpty())
+            <div style="padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--line); border-radius: 4px; font-size: 12px; color: var(--muted); font-family: var(--mono);">
+                No AI telemetry incidents logged yet.
+            </div>
+        @else
+            <div class="table-scroll">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>OPERATIVE</th>
+                            <th>CHALLENGE</th>
+                            <th>SEVERITY</th>
+                            <th>INCIDENT DETAILS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($aiLogs as $log)
+                            <tr>
+                                <td style="font-family: var(--mono); font-size: 11px;">{{ $log->created_at->format('H:i:s') }}</td>
+                                <td>
+                                    <strong style="color: #fff;">{{ $log->user?->callsign ?? 'Unknown' }}</strong>
+                                </td>
+                                <td>{{ $log->challenge?->title ?? 'Platform General' }}</td>
+                                <td>
+                                    @if ($log->severity === 'critical')
+                                        <span class="state-label" style="background: rgba(255, 68, 68, 0.2); color: #ff5555; border-color: rgba(255,68,68,0.5); font-weight: 700;">CRITICAL</span>
+                                    @elseif ($log->severity === 'high')
+                                        <span class="state-label" style="background: rgba(255, 184, 108, 0.2); color: #ffb86c; border-color: rgba(255,184,108,0.5);">HIGH</span>
+                                    @else
+                                        <span class="state-label" style="color: var(--muted);">MEDIUM</span>
+                                    @endif
+                                </td>
+                                <td style="font-size: 12px; color: var(--text);">
+                                    {{ $log->details }}
+                                    @if ($log->submitted_content && $log->submitted_content !== '[FLAG_HASHED]')
+                                        <div style="font-family: var(--mono); font-size: 11px; color: #ffb86c; margin-top: 2px;">
+                                            <code>{{ $log->submitted_content }}</code>
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </section>
+
     <section class="admin-section audit-section">
         <div class="section-heading"><div><div class="eyebrow">CHANGE RECORD <span class="eyebrow-divider">/</span> 06</div><h2>Administrative audit log</h2></div></div>
         @if ($auditLogs->isEmpty())

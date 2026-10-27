@@ -26,6 +26,9 @@ class User extends Authenticatable
         'password',
         'role',
         'is_active',
+        'is_ai_flagged',
+        'ai_suspicion_score',
+        'ai_flag_reason',
     ];
 
     public function getCallsignAttribute(): string
@@ -77,12 +80,19 @@ class User extends Authenticatable
         return $this->hasMany(VerifiedSolve::class);
     }
 
+    public function aiTelemetryLogs(): HasMany
+    {
+        return $this->hasMany(AiTelemetryLog::class);
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_ai_flagged' => 'boolean',
+            'ai_suspicion_score' => 'integer',
         ];
     }
 }

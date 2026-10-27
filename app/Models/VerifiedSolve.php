@@ -14,6 +14,8 @@ class VerifiedSolve extends Model
         'user_id',
         'team_id_at_solve',
         'points_awarded',
+        'is_first_blood',
+        'bonus_points',
         'verified_at',
     ];
 
@@ -21,6 +23,8 @@ class VerifiedSolve extends Model
     {
         return [
             'points_awarded' => 'integer',
+            'is_first_blood' => 'boolean',
+            'bonus_points' => 'integer',
             'verified_at' => 'datetime',
         ];
     }

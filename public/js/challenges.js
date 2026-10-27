@@ -14,11 +14,31 @@
             .filter((el) => el.offsetParent !== null);
     }
 
+    let modalOpenTime = Date.now();
+    let tabSwitches = 0;
+    let wasPasted = false;
+    let keystrokeCount = 0;
+
+    window.addEventListener('visibilitychange', () => {
+        if (document.hidden && !backdrop.hidden) {
+            tabSwitches++;
+        }
+    });
+
     function show() {
         backdrop.hidden = false;
         document.body.classList.add('modal-open');
         dialog.scrollTop = 0;
+        modalOpenTime = Date.now();
+        tabSwitches = 0;
+        wasPasted = false;
+        keystrokeCount = 0;
+
         const input = dialog.querySelector('.modal-flag-input');
+        if (input) {
+            input.addEventListener('paste', () => { wasPasted = true; });
+            input.addEventListener('keydown', (e) => { if (e.key.length === 1) keystrokeCount++; });
+        }
         (input || dialog).focus();
     }
 
@@ -165,6 +185,12 @@
         button.disabled = true;
 
         try {
+            const formData = new FormData(form);
+            formData.append('is_pasted', wasPasted ? '1' : '0');
+            formData.append('duration_seconds', Math.max(1, Math.round((Date.now() - modalOpenTime) / 1000)));
+            formData.append('tab_switches', tabSwitches);
+            formData.append('keystrokes', keystrokeCount);
+
             const response = await fetch(form.action, {
                 method: 'POST',
                 headers: {
@@ -173,7 +199,7 @@
                     'X-CSRF-TOKEN': csrf,
                 },
                 credentials: 'same-origin',
-                body: new FormData(form),
+                body: formData,
             });
             const data = await response.json().catch(() => ({}));
 
@@ -181,9 +207,12 @@
                 showMessage(message, 'error', data.errors.flag[0]);
             } else if (!response.ok) {
                 showMessage(message, 'error', data.message || 'Something went wrong. Please try again.');
-            } else if (data.status === 'solved' || data.status === 'already_solved') {
+            } else if (data.status === 'first_blood' || data.status === 'solved' || data.status === 'already_solved') {
                 showMessage(message, 'success', data.message);
                 markSolved(modal, section);
+            } else if (data.status === 'ai_flagged') {
+                showMessage(message, 'error', data.message);
+                form.querySelector('input[name="flag"]').select();
             } else {
                 showMessage(message, 'error', data.message);
                 form.querySelector('input[name="flag"]').select();
